@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدونة عالم الإلكترونيات - كل ما يخص التكنولوجيا</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts - Cairo for Arabic text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for the Cairo font and general body styling */
+        body {
+            font-family: 'Cairo', sans-serif;
+            direction: rtl; /* Right-to-Left for Arabic */
+            text-align: right;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Specific styles for the mobile navigation toggle transition */
+        .main-nav-mobile-hidden {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+
+        .main-nav-mobile-active {
+            max-height: 300px; /* Adjust based on content */
+        }
+
+        /* Style for the custom message modal */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px; /* Smaller max-width for alerts */
+            text-align: center;
+        }
+
+        .close-button {
+            color: #aaa;
+            float: left; /* Aligned to the left for RTL */
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Style for the login modal, similar to message modal */
+        #login-modal .modal-content {
+            max-width: 450px;
+            padding: 2.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="close-login-modal-btn">&times;</span>
+            <h2 class="text-2xl font-bold mb-6 text-blue-700">تسجيل الدخول للإدارة</h2>
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label for="username" class="block text-gray-700 text-lg font-semibold mb-2">اسم المستخدم:</label>
+                    <input type="text" id="username" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <div>
+                    <label for="password" class="block text-gray-700 text-lg font-semibold mb-2">كلمة المرور:</label>
+                    <input type="password" id="password" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition-colors duration-300 shadow-md">
+                    <i class="fas fa-sign-in-alt ml-2"></i> دخول
+                </button>
+            </form>
+            <p class="text-red-500 text-sm mt-4 hidden" id="login-error-message">اسم المستخدم أو كلمة المرور غير صحيحة.</p>
+             <p class="text-xs text-gray-500 mt-4 text-center">
+                للدخول: اسم المستخدم "loai"، كلمة المرور "Loai"
+            </p>
+            <p class="text-red-600 text-xs mt-2 text-center font-bold">
+                تنبيه: هذا النظام غير آمن للاستخدام الحقيقي!
+            </p>
+        </div>
+    </div>
+
+    <!-- Main Website View -->
+    <div id="main-website-view">
+        <!-- Header Section -->
+        <header class="bg-blue-700 text-white py-4 shadow-lg rounded-b-xl">
+            <div class="container mx-auto px-4 flex justify-between items-center relative">
+                <!-- Logo -->
+                <a href="#" class="text-3xl font-bold text-white tracking-wide">
+                    عالم <span class="text-yellow-400">الإلكترونيات</span>
+                </a>
+
+                <!-- Mobile Navigation Toggle Button -->
+                <button class="nav-toggle md:hidden text-3xl text-white cursor-pointer absolute left-4 top-1/2 -translate-y-1/2 focus:outline-none" aria-label="Toggle navigation">
+                    &#9776;
+                </button>
+
+                <!-- Main Navigation -->
+                <nav class="main-nav md:block main-nav-mobile-hidden md:max-h-full w-full md:w-auto md:bg-transparent absolute md:static top-full right-0 bg-blue-600 rounded-b-lg md:rounded-none z-10 shadow-md md:shadow-none">
+                    <ul class="flex flex-col md:flex-row md:items-center py-3 md:py-0 list-none">
+                        <li class="md:ml-8 my-2 md:my-0 text-center">
+                            <a href="#" class="text-white hover:text-yellow-400 font-semibold text-lg transition-colors duration-300">الرئيسية</a>
+                        </li>
+                        <li class="md:ml-8 my-2 md:my-0 text-center">
+                            <a href="#" class="text-white hover:text-yellow-400 font-semibold text-lg transition-colors duration-300">مراجعات</a>
+                        </li>
+                        <li class="md:ml-8 my-2 md:my-0 text-center">
+                            <a href="#" class="text-white hover:text-yellow-400 font-semibold text-lg transition-colors duration-300">أخبار التقنية</a>
+                        </li>
+                        <li class="md:ml-8 my-2 md:my-0 text-center">
+                            <a href="#" class="text-white hover:text-yellow-400 font-semibold text-lg transition-colors duration-300">نصائح وحيل</a>
+                        </li>
+                        <li class="md:ml-8 my-2 md:my-0 text-center">
+                            <a href="#" class="text-white hover:text-yellow-400 font-semibold text-lg transition-colors duration-300">اتصل بنا</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero bg-blue-600 text-white text-center py-20 md:py-32 flex flex-col justify-center items-center min-h-[400px] shadow-inner rounded-xl mx-4 mt-8">
+            <div class="container mx-auto px-4">
+                <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight text-shadow-md">اكتشف أحدث ما في عالم التكنولوجيا</h1>
+                <p class="text-lg md:text-xl max-w-3xl mx-auto mb-8 opacity-90">مراجعات عميقة، أخبار حصرية، ونقاشات متعمقة حول كل ما هو جديد في الإلكترونيات.</p>
+                <a href="#" class="btn bg-yellow-400 text-blue-800 px-8 py-3 rounded-full font-bold text-lg hover:bg-yellow-500 transition-all duration-300 shadow-md hover:shadow-lg">
+                    اكتشف الآن
+                </a>
+            </div>
+        </section>
+
+        <!-- Main Content Grid -->
+        <div class="main-content container mx-auto px-4 py-10 md:py-16 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+            <!-- Articles Section -->
+            <main class="articles-section md:col-span-2">
+                <h2 class="text-3xl font-bold mb-8 text-blue-800 border-b-2 border-blue-200 pb-3">أحدث المقالات</h2>
+                <div id="articles-container" class="article-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-8">
+                    <!-- Articles will be loaded here dynamically from Firestore -->
+                    <div class="text-center text-gray-500 col-span-full py-10">
+                        <i class="fas fa-spinner fa-spin text-4xl mb-4 text-blue-500"></i>
+                        <p>جاري تحميل المقالات...</p>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Sidebar Section -->
+            <aside class="sidebar">
+                <!-- Featured Ads -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                    <h3 class="text-2xl font-bold mb-5 text-blue-800 border-b-2 border-blue-200 pb-3">إعلانات مميزة</h3>
+                    <div class="ad-unit bg-gray-100 border border-dashed border-gray-300 p-8 rounded-lg text-center text-gray-500 text-sm min-h-[150px] flex items-center justify-center mb-6">
+                        مساحة إعلانية (جوجل أدسنس)
+                    </div>
+                    <div class="ad-unit bg-gray-100 border border-dashed border-gray-300 p-8 rounded-lg text-center text-gray-500 text-sm min-h-[150px] flex items-center justify-center">
+                        مساحة إعلانية (جوجل أدسنس) أخرى
+                    </div>
+                </div>
+
+                <!-- Follow Us -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-2xl font-bold mb-5 text-blue-800 border-b-2 border-blue-200 pb-3">تابعنا</h3>
+                    <div class="social-links flex justify-center space-x-6">
+                        <a href="#" class="text-blue-600 hover:text-blue-800 transform hover:scale-110 transition-all duration-300" aria-label="Facebook">
+                            <i class="fab fa-facebook-square text-4xl"></i>
+                        </a>
+                        <a href="#" class="text-blue-400 hover:text-blue-600 transform hover:scale-110 transition-all duration-300" aria-label="Twitter">
+                            <i class="fab fa-twitter-square text-4xl"></i>
+                        </a>
+                        <a href="#" class="text-pink-500 hover:text-pink-700 transform hover:scale-110 transition-all duration-300" aria-label="Instagram">
+                            <i class="fab fa-instagram-square text-4xl"></i>
+                        </a>
+                        <a href="#" class="text-red-600 hover:text-red-800 transform hover:scale-110 transition-all duration-300" aria-label="YouTube">
+                            <i class="fab fa-youtube-square text-4xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <!-- Footer Section (for main website) -->
+        <footer class="footer bg-gray-900 text-gray-300 py-10 text-center rounded-t-xl mt-12">
+            <div class="container mx-auto px-4">
+                <nav class="footer-nav mb-6">
+                    <ul class="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-6 list-none">
+                        <li class="sm:mx-3"><a href="#" class="text-gray-300 hover:text-yellow-400 text-base transition-colors duration-300">سياسة الخصوصية</a></li>
+                        <li class="sm:mx-3"><a href="#" class="text-gray-300 hover:text-yellow-400 text-base transition-colors duration-300">شروط الاستخدام</a></li>
+                        <li class="sm:mx-3"><a href="#" class="text-gray-300 hover:text-yellow-400 text-base transition-colors duration-300">خريطة الموقع</a></li>
+                        <li class="sm:mx-3">
+                            <button id="show-admin-login-btn" class="text-gray-300 hover:text-yellow-400 text-base transition-colors duration-300 bg-transparent border-none cursor-pointer p-0">
+                                <i class="fas fa-user-shield ml-2"></i> لوحة الإدارة
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+                <p class="text-sm">&copy; 2025 عالم الإلكترونيات. جميع الحقوق محفوظة.</p>
+            </div>
+        </footer>
+    </div> <!-- End of main-website-view -->
+
+    <!-- Admin Panel View -->
+    <div id="admin-panel-view" class="hidden">
+        <!-- Header Section for Admin Panel -->
+        <header class="bg-blue-800 text-white py-4 shadow-lg rounded-b-xl">
+            <div class="container mx-auto px-4 flex justify-between items-center">
+                <h1 class="text-3xl font-bold">لوحة الإدارة</h1>
+                <button id="admin-logout-btn" class="text-blue-200 hover:text-white transition-colors duration-300 bg-transparent border-none cursor-pointer p-0">
+                    <i class="fas fa-sign-out-alt ml-2"></i> تسجيل الخروج
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content Section (Admin) -->
+        <div class="container mx-auto px-4 py-8 md:py-12">
+            <!-- Add New Article Form -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                <h2 class="text-2xl font-bold mb-6 text-blue-700 border-b-2 border-blue-200 pb-3">إضافة / تعديل مقال</h2>
+                <form id="article-form" class="space-y-4">
+                    <input type="hidden" id="article-id">
+                    <div>
+                        <label for="article-title" class="block text-gray-700 text-lg font-semibold mb-2">عنوان المقال:</label>
+                        <input type="text" id="article-title" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="اكتب عنوان المقال هنا" required>
+                    </div>
+                    <div>
+                        <label for="article-summary" class="block text-gray-700 text-lg font-semibold mb-2">ملخص المقال:</label>
+                        <textarea id="article-summary" rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="اكتب ملخصًا قصيرًا للمقال" required></textarea>
+                    </div>
+                    <div>
+                        <label for="article-content" class="block text-gray-700 text-lg font-semibold mb-2">محتوى المقال:</label>
+                        <textarea id="article-content" rows="10" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="اكتب محتوى المقال بالكامل هنا" required></textarea>
+                    </div>
+                    <div>
+                        <label for="article-image" class="block text-gray-700 text-lg font-semibold mb-2">رابط صورة المقال:</label>
+                        <input type="url" id="article-image" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="https://example.com/image.jpg">
+                        <p class="text-sm text-gray-500 mt-1">
+                            (اختياري: إذا لم يتم توفير رابط، سيتم استخدام صورة افتراضية)
+                        </p>
+                    </div>
+                    <div class="flex justify-end space-x-reverse space-x-4">
+                        <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition-colors duration-300 shadow-md">
+                            <i class="fas fa-save ml-2"></i> حفظ المقال
+                        </button>
+                        <button type="button" id="clear-form-btn" class="bg-gray-400 text-gray-800 px-6 py-3 rounded-lg font-bold hover:bg-gray-500 transition-colors duration-300 shadow-md">
+                            <i class="fas fa-redo ml-2"></i> مسح الحقول
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Articles List Section -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-bold mb-6 text-blue-700 border-b-2 border-blue-200 pb-3">المقالات الحالية</h2>
+                <div id="articles-list" class="space-y-4">
+                    <!-- Articles will be loaded here dynamically -->
+                    <div class="text-center text-gray-500 py-10">
+                        <i class="fas fa-spinner fa-spin text-4xl mb-4 text-blue-500"></i>
+                        <p>جاري تحميل المقالات...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- End of admin-panel-view -->
+
+    <!-- Custom Message Modal (for general alerts) -->
+    <div id="message-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="close-modal-btn">&times;</span>
+            <p id="modal-message" class="text-lg font-semibold text-gray-700"></p>
+            <button id="modal-ok-btn" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">موافق</button>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs and Main Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDoc, updateDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Firebase configuration and app ID (provided by the Canvas environment)
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        let userId = null; // Store Firebase user ID
+
+        // DOM Elements
+        const mainWebsiteView = document.getElementById('main-website-view');
+        const adminPanelView = document.getElementById('admin-panel-view');
+        const showAdminLoginBtn = document.getElementById('show-admin-login-btn');
+        const adminLogoutBtn = document.getElementById('admin-logout-btn');
+
+        // Login Modal Elements
+        const loginModal = document.getElementById('login-modal');
+        const closeLoginModalBtn = document.getElementById('close-login-modal-btn');
+        const loginForm = document.getElementById('login-form');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginErrorMessage = document.getElementById('login-error-message');
+
+        // Admin Panel Form Elements
+        const articleForm = document.getElementById('article-form');
+        const articleIdInput = document.getElementById('article-id');
+        const articleTitleInput = document.getElementById('article-title');
+        const articleSummaryInput = document.getElementById('article-summary');
+        const articleContentInput = document.getElementById('article-content');
+        const articleImageInput = document.getElementById('article-image');
+        const articlesList = document.getElementById('articles-list');
+        const clearFormBtn = document.getElementById('clear-form-btn');
+
+        // Main Website Articles Container
+        const articlesContainer = document.getElementById('articles-container');
+
+        // Custom Message Modal Elements
+        const messageModal = document.getElementById('message-modal');
+        const modalMessage = document.getElementById('modal-message');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const modalOkBtn = document.getElementById('modal-ok-btn');
+
+        // --- Utility Functions ---
+
+        // Function to show custom message modal
+        function showMessageModal(message) {
+            modalMessage.textContent = message;
+            messageModal.style.display = 'flex'; // Use flex to center
+        }
+
+        // Close message modal event listeners
+        closeModalBtn.addEventListener('click', () => {
+            messageModal.style.display = 'none';
+        });
+        modalOkBtn.addEventListener('click', () => {
+            messageModal.style.display = 'none';
+        });
+        window.addEventListener('click', (event) => {
+            if (event.target == messageModal) {
+                messageModal.style.display = 'none';
+            }
+        });
+
+        // Function to show the main website view
+        function showMainWebsite() {
+            mainWebsiteView.classList.remove('hidden');
+            adminPanelView.classList.add('hidden');
+            loginModal.style.display = 'none'; // Ensure login modal is hidden
+            loadMainArticles(); // Reload main articles if they were not loaded or view changed
+        }
+
+        // Function to show the admin panel view
+        function showAdminPanel() {
+            mainWebsiteView.classList.add('hidden');
+            adminPanelView.classList.remove('hidden');
+            loginModal.style.display = 'none'; // Ensure login modal is hidden
+            loadArticlesForAdmin(); // Load admin articles
+        }
+
+        // --- Authentication Logic ---
+
+        // Authentication for Firebase (for both public site and admin's Firestore access)
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                if (typeof __initial_auth_token !== 'undefined') {
+                    try {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                        userId = auth.currentUser?.uid || crypto.randomUUID();
+                        console.log("Firebase: Signed in with custom token. User ID:", userId);
+                    } catch (error) {
+                        console.error("Firebase: Error signing in with custom token:", error);
+                        await signInAnonymously(auth); // Fallback to anonymous if custom fails
+                        userId = auth.currentUser?.uid || crypto.randomUUID();
+                        console.log("Firebase: Signed in anonymously due to custom token failure. User ID:", userId);
+                    }
+                } else {
+                    await signInAnonymously(auth);
+                    userId = auth.currentUser?.uid || crypto.randomUUID();
+                    console.log("Firebase: Signed in anonymously (no initial token). User ID:", userId);
+                }
+            } else {
+                userId = user.uid;
+                console.log("Firebase: User already signed in. User ID:", userId);
+            }
+            // Always load main articles after Firebase auth is ready
+            loadMainArticles();
+        });
+
+        // Show login modal when admin button is clicked
+        showAdminLoginBtn.addEventListener('click', () => {
+            loginModal.style.display = 'flex';
+            usernameInput.focus();
+            loginErrorMessage.classList.add('hidden'); // Hide any previous error
+        });
+
+        // Close login modal
+        closeLoginModalBtn.addEventListener('click', () => {
+            loginModal.style.display = 'none';
+            loginForm.reset(); // Clear form on close
+            loginErrorMessage.classList.add('hidden');
+        });
+        window.addEventListener('click', (event) => {
+            if (event.target == loginModal) {
+                loginModal.style.display = 'none';
+                loginForm.reset();
+                loginErrorMessage.classList.add('hidden');
+            }
+        });
+
+
+        // Handle Login Form Submission
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = usernameInput.value;
+            const password = passwordInput.value;
+
+            // Simple client-side check (NOT SECURE for production!)
+            if (username === 'loai' && password === 'Loai') {
+                localStorage.setItem('adminLoggedIn', 'true'); // Store login state
+                showAdminPanel();
+                showMessageModal("تم تسجيل الدخول بنجاح إلى لوحة الإدارة!");
+                loginForm.reset(); // Clear login form
+                loginErrorMessage.classList.add('hidden');
+            } else {
+                loginErrorMessage.classList.remove('hidden');
+            }
+        });
+
+        // Handle Admin Logout
+        adminLogoutBtn.addEventListener('click', async () => {
+            try {
+                // await signOut(auth); // Use Firebase signOut for a real app
+                localStorage.removeItem('adminLoggedIn'); // Clear login state
+                showMainWebsite();
+                showMessageModal("تم تسجيل الخروج بنجاح.");
+            } catch (error) {
+                console.error("Error during logout:", error);
+                showMessageModal("حدث خطأ أثناء تسجيل الخروج.");
+            }
+        });
+
+        // Check login state on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('adminLoggedIn') === 'true') {
+                showAdminPanel();
+            } else {
+                showMainWebsite();
+            }
+            // Mobile navigation toggle
+            const navToggle = document.querySelector('.nav-toggle');
+            const mainNav = document.querySelector('.main-nav');
+            if (navToggle && mainNav) {
+                navToggle.addEventListener('click', () => {
+                    mainNav.classList.toggle('main-nav-mobile-active');
+                    mainNav.classList.toggle('main-nav-mobile-hidden');
+                });
+            }
+        });
+
+        // --- Main Website Article Loading ---
+
+        const loadMainArticles = () => {
+            if (!articlesContainer) {
+                console.error("Main articles container not found!");
+                return;
+            }
+
+            // Ensure Firebase is initialized and userId is available before fetching
+            if (!userId) {
+                articlesContainer.innerHTML = `
+                    <div class="text-center text-gray-500 col-span-full py-10">
+                        <i class="fas fa-spinner fa-spin text-4xl mb-4 text-blue-500"></i>
+                        <p>جاري تهيئة النظام وتحميل المقالات...</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const articlesCollectionRef = collection(db, `artifacts/${appId}/public/data/articles`);
+            
+            onSnapshot(articlesCollectionRef, (snapshot) => {
+                articlesContainer.innerHTML = ''; // Clear existing articles
+
+                if (snapshot.empty) {
+                    articlesContainer.innerHTML = `
+                        <div class="text-center text-gray-500 col-span-full py-10">
+                            <i class="fas fa-box-open text-4xl mb-4 text-blue-500"></i>
+                            <p class="text-lg">لا توجد مقالات لعرضها حاليًا.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const articles = [];
+                snapshot.forEach(doc => {
+                    articles.push({ id: doc.id, ...doc.data() });
+                });
+
+                // Sort articles by timestamp in descending order (newest first)
+                articles.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+                articles.forEach(article => {
+                    const articleCard = `
+                        <div class="article-card bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl flex flex-col">
+                            <img src="${article.imageUrl || 'https://placehold.co/400x200/ccc/999?text=صورة+غير+متوفرة'}" alt="${article.title || 'صورة مقال'}" 
+                                class="w-full h-48 object-cover rounded-t-xl" 
+                                onerror="this.onerror=null;this.src='https://placehold.co/400x200/ccc/999?text=صورة+غير+متوفرة';">
+                            <div class="article-card-content p-5 flex flex-col flex-grow">
+                                <h3 class="text-xl font-bold mb-3 text-blue-700">${article.title || 'عنوان المقال'}</h3>
+                                <p class="text-gray-600 text-base leading-relaxed mb-4 flex-grow">${article.summary || 'ملخص قصير للمقال لا يتجاوز بضعة أسطر.'}</p>
+                                <a href="#" onclick="showMessageModal('هذه وظيفة لم يتم تنفيذها في هذا المثال!'); return false;" class="read-more text-blue-600 font-semibold text-base hover:underline self-start">اقرأ المزيد &raquo;</a>
+                            </div>
+                        </div>
+                    `;
+                    articlesContainer.insertAdjacentHTML('beforeend', articleCard);
+                });
+            }, (error) => {
+                console.error("Error fetching main articles: ", error);
+                articlesContainer.innerHTML = `
+                    <div class="text-center text-red-500 col-span-full py-10">
+                        <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
+                        <p class="text-lg">حدث خطأ أثناء تحميل المقالات. يرجى المحاولة مرة أخرى.</p>
+                    </div>
+                `;
+            });
+        };
+
+        // --- Admin Panel Article Management Logic ---
+
+        // Function to clear the admin form
+        clearFormBtn.addEventListener('click', () => {
+            articleForm.reset();
+            articleIdInput.value = '';
+            // Change button text back to 'حفظ المقال' if it was 'تعديل المقال'
+            articleForm.querySelector('button[type="submit"]').innerHTML = '<i class="fas fa-save ml-2"></i> حفظ المقال';
+        });
+
+        // Function to load articles for administration with real-time updates
+        const loadArticlesForAdmin = () => {
+            if (!userId || localStorage.getItem('adminLoggedIn') !== 'true') {
+                console.warn("Not authorized to load admin articles.");
+                articlesList.innerHTML = `
+                    <div class="text-center text-red-500 py-10">
+                        <i class="fas fa-ban text-4xl mb-4"></i>
+                        <p class="text-lg">ليس لديك صلاحية لعرض هذه المقالات.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const articlesCollectionRef = collection(db, `artifacts/${appId}/public/data/articles`);
+
+            onSnapshot(articlesCollectionRef, (snapshot) => {
+                articlesList.innerHTML = ''; // Clear existing articles
+                if (snapshot.empty) {
+                    articlesList.innerHTML = `
+                        <div class="text-center text-gray-500 py-10">
+                            <i class="fas fa-box-open text-4xl mb-4 text-blue-500"></i>
+                            <p class="text-lg">لا توجد مقالات في القاعدة حاليًا.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const articles = [];
+                snapshot.forEach(doc => {
+                    articles.push({ id: doc.id, ...doc.data() });
+                });
+
+                // Sort articles by timestamp in descending order (newest first)
+                articles.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+                articles.forEach(article => {
+                    const articleItem = `
+                        <div class="flex flex-col sm:flex-row items-center justify-between bg-gray-50 p-4 rounded-lg shadow-sm border border-gray-200">
+                            <span class="font-semibold text-lg mb-2 sm:mb-0">${article.title || 'بلا عنوان'}</span>
+                            <div class="flex space-x-reverse space-x-2">
+                                <button data-id="${article.id}" data-action="edit" class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition-colors duration-300">
+                                    <i class="fas fa-edit ml-1"></i> تعديل
+                                </button>
+                                <button data-id="${article.id}" data-action="delete" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors duration-300">
+                                    <i class="fas fa-trash-alt ml-1"></i> حذف
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    articlesList.insertAdjacentHTML('beforeend', articleItem);
+                });
+
+                // Attach event listeners to newly created buttons
+                articlesList.querySelectorAll('button[data-action="edit"]').forEach(button => {
+                    // Use closest('button') to ensure the event listener is on the button itself, not its child icon
+                    button.addEventListener('click', (e) => editArticle(e.currentTarget.dataset.id));
+                });
+                articlesList.querySelectorAll('button[data-action="delete"]').forEach(button => {
+                    button.addEventListener('click', (e) => deleteArticle(e.currentTarget.dataset.id));
+                });
+
+            }, (error) => {
+                console.error("Error fetching articles for admin: ", error);
+                articlesList.innerHTML = `
+                    <div class="text-center text-red-500 py-10">
+                        <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
+                        <p class="text-lg">حدث خطأ أثناء تحميل المقالات للوحة الإدارة.</p>
+                    </div>
+                `;
+            });
+        };
+
+        // Handle form submission (Add/Update Article)
+        articleForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const id = articleIdInput.value;
+            const title = articleTitleInput.value.trim();
+            const summary = articleSummaryInput.value.trim();
+            const content = articleContentInput.value.trim();
+            const imageUrl = articleImageInput.value.trim();
+            const timestamp = Date.now(); // For sorting articles by creation/update time
+
+            if (!title || !summary || !content) {
+                showMessageModal("يرجى ملء جميع الحقول المطلوبة (العنوان، الملخص، المحتوى).");
+                return;
+            }
+
+            const articleData = {
+                title,
+                summary,
+                content,
+                imageUrl,
+                timestamp
+            };
+
+            try {
+                if (id) {
+                    // Update existing article
+                    const articleDocRef = doc(db, `artifacts/${appId}/public/data/articles`, id);
+                    await updateDoc(articleDocRef, articleData);
+                    showMessageModal("تم تحديث المقال بنجاح!");
+                } else {
+                    // Add new article
+                    await addDoc(collection(db, `artifacts/${appId}/public/data/articles`), articleData);
+                    showMessageModal("تمت إضافة المقال بنجاح!");
+                }
+                articleForm.reset();
+                articleIdInput.value = '';
+                articleForm.querySelector('button[type="submit"]').innerHTML = '<i class="fas fa-save ml-2"></i> حفظ المقال';
+            } catch (error) {
+                console.error("Error saving article:", error);
+                showMessageModal(`حدث خطأ أثناء حفظ المقال: ${error.message}`);
+            }
+        });
+
+        // Function to edit an article (populate form)
+        const editArticle = async (id) => {
+            const articleDocRef = doc(db, `artifacts/${appId}/public/data/articles`, id);
+            try {
+                const docSnap = await getDoc(articleDocRef); // Use getDoc to fetch a single doc
+                if (docSnap.exists()) {
+                    const article = docSnap.data();
+                    articleIdInput.value = docSnap.id;
+                    articleTitleInput.value = article.title || '';
+                    articleSummaryInput.value = article.summary || '';
+                    articleContentInput.value = article.content || '';
+                    articleImageInput.value = article.imageUrl || '';
+                    // Change button text to indicate editing
+                    articleForm.querySelector('button[type="submit"]').innerHTML = '<i class="fas fa-edit ml-2"></i> تعديل المقال';
+                    // Scroll to the top of the form
+                    articleForm.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    showMessageModal("المقال غير موجود!");
+                }
+            } catch (error) {
+                console.error("Error fetching article for edit:", error);
+                showMessageModal(`حدث خطأ أثناء جلب المقال للتعديل: ${error.message}`);
+            }
+        };
+
+        // Function to delete an article
+        const deleteArticle = async (id) => {
+            // Using custom modal for confirmation
+            modalMessage.innerHTML = 'هل أنت متأكد من رغبتك في حذف هذا المقال؟<div class="mt-4 flex justify-center space-x-4"><button id="confirm-delete-btn" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">نعم، احذف</button><button id="cancel-delete-btn" class="bg-gray-400 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-500">إلغاء</button></div>';
+            messageModal.style.display = 'flex';
+
+            document.getElementById('confirm-delete-btn').onclick = async () => {
+                try {
+                    const articleDocRef = doc(db, `artifacts/${appId}/public/data/articles`, id);
+                    await deleteDoc(articleDocRef);
+                    showMessageModal("تم حذف المقال بنجاح!");
+                } catch (error) {
+                    console.error("Error deleting article:", error);
+                    showMessageModal(`حدث خطأ أثناء حذف المقال: ${error.message}`);
+                }
+            };
+            document.getElementById('cancel-delete-btn').onclick = () => {
+                messageModal.style.display = 'none';
+                showMessageModal("تم إلغاء الحذف.");
+            };
+        };
+    </script>
+</body>
+</html>
