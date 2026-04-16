@@ -254,10 +254,10 @@
                                             <option value="Activation">Resent Activation Code</option>
                                             <option value="Fraud">Fraud Suspicious</option>
                                             <option value="CC_Install">CC Installment Request</option>
+                                            <option value="SMS_Notification">SMS Notification</option>
                                         </select>
                                     </div>
                                 </div>
-
                                 <div class="card-only hidden" style="border-top: 1px solid var(--border-color); padding-top: 0.5rem; margin-top: 0.5rem;">
                                     <div class="section-title"><svg class="svg-icon" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> Card Information</div>
                                     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
@@ -266,7 +266,6 @@
                                         <div class="input-group"><label class="label-pro">Card Category</label><select id="card_cat" onchange="handleCatChange()" class="input-pro"></select></div>
                                     </div>
                                 </div>
-
                                 <div id="travel_limits_box" style="display: none; border: 2px solid; border-radius: 8px; padding: 0.5rem; margin: 0.25rem 0; justify-content: space-around; font-weight: 800; align-items: center; font-size: 0.75rem;">
                                     <div class="flex items-center gap-2"><svg class="svg-icon" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg> <span>POS: </span> <span id="limit_buy">--</span></div>
                                     <div style="width: 2px; height: 15px; background: currentColor; opacity: 0.3;"></div>
@@ -382,7 +381,26 @@
                                         <div class="activation-only hidden input-group"><label class="label-pro">User Type</label><select id="user_type" class="input-pro"><option>Viewer</option><option>Super</option></select></div>
 
                                         <div class="fraud-only hidden input-group" style="grid-column: 1 / -1;"><label class="label-pro">Fraud Transaction Details</label><textarea id="fraud_details" class="input-pro" rows="2" placeholder="Write full details..."></textarea></div>
-                                        
+                                       <div class="sms-notif-only hidden" style="grid-column: 1 / -1; width: 100%; margin-top: 0.5rem;">
+                                            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem;">
+                                                <div class="input-group">
+                                                    <label class="label-pro">Card Number</label>
+                                                    <input type="text" id="sms_card_mask" maxlength="19" placeholder="xxxx xxxx xxxx xxxx" class="input-pro font-mono" style="text-align: center; font-weight: bold; color: var(--scb-blue);">
+                                                </div>
+                                                <div class="input-group">
+                                                    <label class="label-pro">Time Stamp</label>
+                                                    <input type="text" id="sms_timestamp" class="input-pro">
+                                                </div>
+                                                <div class="input-group">
+                                                    <label class="label-pro">Seq Number</label>
+                                                    <input type="text" id="sms_seq" class="input-pro">
+                                                </div>
+                                                <div class="input-group">
+                                                    <label class="label-pro">RRN Number</label>
+                                                    <input type="text" id="sms_rrn" class="input-pro">
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="cc-install-only hidden input-group"><label class="label-pro">Transaction Type</label><select id="inst_trx_type" class="input-pro"><option>POS</option><option>Cash</option></select></div>
                                         <div class="cc-install-only hidden input-group"><label class="label-pro">Tenor (Months)</label><select id="inst_tenor" class="input-pro"><option>3</option><option>6</option><option>9</option><option>12</option><option>15</option><option>18</option></select></div>
                                         <div class="cc-install-only hidden input-group"><label class="label-pro">Transaction Date</label><input type="date" id="inst_trx_date" class="input-pro"></div>
@@ -925,7 +943,7 @@
 
                 document.getElementById('card_num').addEventListener('input', formatCard);
                 document.getElementById('disp_card_num').addEventListener('input', formatCard);
-
+                document.getElementById('sms_card_mask').addEventListener('input', formatCard);
                 if(document.getElementById('activation_date')) document.getElementById('activation_date').valueAsDate = new Date();
                 if(document.getElementById('req_date')) document.getElementById('req_date').valueAsDate = new Date();
 
@@ -1034,7 +1052,7 @@
                 if(document.getElementById('req_date')) document.getElementById('req_date').valueAsDate = new Date();
 
                 // إخفاء جميع الحقول أولاً
-                document.querySelectorAll('.request-only, .travel-only, .replacement-only, .mails-only, .card-only, .branch-field, .limit-only, .complaint-only, .dispute-only, .suffix-only, .rule-only, .cc-ref-only, .activation-only, .fraud-only, .cc-install-only').forEach(el => el.classList.add('hidden'));
+                document.querySelectorAll('.request-only, .travel-only, .replacement-only, .mails-only, .card-only, .branch-field, .limit-only, .complaint-only, .dispute-only, .suffix-only, .rule-only, .cc-ref-only, .activation-only, .fraud-only, .cc-install-only, .sms-notif-only').forEach(el => el.classList.add('hidden'));
                 
                 document.getElementById('travel_limits_box').style.display = 'none';
                 document.getElementById('replacement_fee_box').style.display = 'none';
@@ -1072,24 +1090,31 @@
             ===================================================== 
             */
             function handleMainRequestChange() {
-                const type = document.getElementById('main_request_type').value;
-                currentMission = type;
-                
-                document.querySelectorAll('.travel-only, .replacement-only, .card-only, .limit-only, .suffix-only, .rule-only, .cc-ref-only, .activation-only, .fraud-only, .cc-install-only, .branch-field').forEach(el => el.classList.add('hidden'));                
-                if(!type) return;
+    const type = document.getElementById('main_request_type').value;
+    currentMission = type;
+    
+    // إخفاء كل السكاشن في البداية
+    document.querySelectorAll('.travel-only, .replacement-only, .card-only, .limit-only, .suffix-only, .rule-only, .cc-ref-only, .activation-only, .fraud-only, .cc-install-only, .branch-field, .sms-notif-only').forEach(el => el.classList.add('hidden'));                
+    
+    if(!type) return;
 
-                if(type === 'Online Limit') { document.querySelectorAll('.card-only, .limit-only').forEach(el => el.classList.remove('hidden')); }
-                else if(type === 'Travel Note') { document.querySelectorAll('.card-only, .travel-only').forEach(el => el.classList.remove('hidden')); }
-                else if(type === 'Card Replacement') { document.querySelectorAll('.card-only, .replacement-only, .branch-field').forEach(el => el.classList.remove('hidden')); }
-                else if(type === 'Reset PIN') { document.querySelectorAll('.card-only').forEach(el => el.classList.remove('hidden')); }
-                else if(type === 'Suffix') { document.querySelectorAll('.card-only, .suffix-only').forEach(el => el.classList.remove('hidden')); }
-                else if(type === 'Remove Rule') { document.querySelectorAll('.card-only, .rule-only').forEach(el => el.classList.remove('hidden')); }
-                else if(type === 'SMS Mod') { document.querySelectorAll('.card-only, .branch-field').forEach(el => el.classList.remove('hidden')); }
-                else if(type === 'CC Referral') { document.querySelectorAll('.card-only, .cc-ref-only').forEach(el => el.classList.remove('hidden')); }
-                else if(type === 'Activation') { document.querySelectorAll('.activation-only').forEach(el => el.classList.remove('hidden')); }
-                else if(type === 'Fraud') { document.querySelectorAll('.card-only, .fraud-only').forEach(el => el.classList.remove('hidden')); }
-                else if(type === 'CC_Install') { document.querySelectorAll('.card-only, .cc-install-only').forEach(el => el.classList.remove('hidden')); }
-            }
+    if(type === 'Online Limit') { document.querySelectorAll('.card-only, .limit-only').forEach(el => el.classList.remove('hidden')); }
+    else if(type === 'Travel Note') { document.querySelectorAll('.card-only, .travel-only').forEach(el => el.classList.remove('hidden')); }
+    else if(type === 'Card Replacement') { document.querySelectorAll('.card-only, .replacement-only, .branch-field').forEach(el => el.classList.remove('hidden')); }
+    else if(type === 'Reset PIN') { document.querySelectorAll('.card-only').forEach(el => el.classList.remove('hidden')); }
+    else if(type === 'Suffix') { document.querySelectorAll('.card-only, .suffix-only').forEach(el => el.classList.remove('hidden')); }
+    else if(type === 'Remove Rule') { document.querySelectorAll('.card-only, .rule-only').forEach(el => el.classList.remove('hidden')); }
+    else if(type === 'SMS Mod') { document.querySelectorAll('.card-only, .branch-field').forEach(el => el.classList.remove('hidden')); }
+    else if(type === 'CC Referral') { document.querySelectorAll('.card-only, .cc-ref-only').forEach(el => el.classList.remove('hidden')); }
+    else if(type === 'Activation') { document.querySelectorAll('.activation-only').forEach(el => el.classList.remove('hidden')); }
+    else if(type === 'Fraud') { document.querySelectorAll('.card-only, .fraud-only').forEach(el => el.classList.remove('hidden')); }
+    else if(type === 'CC_Install') { document.querySelectorAll('.card-only, .cc-install-only').forEach(el => el.classList.remove('hidden')); }
+    
+    // التعديل هنا: هيظهر سكشن الـ SMS فقط بدون سكشن الـ Card Information
+    else if(type === 'SMS_Notification') {
+        document.querySelector('.sms-notif-only').classList.remove('hidden');
+    }
+}
 
             function loadCats() {
                 const t = document.getElementById('card_type').value;
@@ -1238,6 +1263,13 @@
                     d["Visit Date"] = getVal('visit_date'); 
                     d["Complaint"] = getVal('comp_details'); 
                     d["Action Required"] = getVal('comp_action'); 
+                }
+                else if(currentMission === 'SMS Notification') {
+                    d["Request"] = "SMS_Notification";
+                    d["Card Number"] = maskCard(getVal('sms_card_mask'));
+                    d["Time Stamp"] = getVal('sms_timestamp');
+                    d["Seq Number"] = getVal('sms_seq');
+                    d["RRN"] = getVal('sms_rrn');
                 }
                 else if(currentMission === 'CC_Install') { 
                     d["Card No"] = maskCard(getVal('card_num')); d["Trx Type"] = getVal('inst_trx_type'); d["Tenor"] = getVal('inst_tenor') + " Months"; 
