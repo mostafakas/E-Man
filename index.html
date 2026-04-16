@@ -1710,13 +1710,19 @@
                 document.getElementById('settle_total_out').innerText = total.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' EGP';
             }
 
-            function loadTariffPDF() {
-                const url = document.getElementById('tariff_selector').value;
+           function loadTariffPDF() {
+                // 1. جلب الرابط الأصلي للملف من القائمة المنسدلة
+                const originalUrl = document.getElementById('tariff_selector').value;
                 const frame = document.getElementById('tariff_frame');
                 const placeholder = document.getElementById('pdf_placeholder');
 
-                if (url) {
-                    frame.src = url;
+                if (originalUrl) {
+                    // 2. دمج رابط الملف مع محرك عرض جوجل وتشفير الرابط لضمان عمل الحروف الخاصة (مثل العربية)
+                    const googleViewerUrl = "https://docs.google.com/viewer?url=" + encodeURIComponent(originalUrl) + "&embedded=true";
+                    
+                    // 3. وضع الرابط الجديد في الـ Iframe
+                    frame.src = googleViewerUrl;
+                    
                     frame.style.display = 'block';
                     placeholder.style.display = 'none';
                 } else {
