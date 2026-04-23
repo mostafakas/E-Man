@@ -662,71 +662,149 @@
                     </div>
                 </div>
                 <div id="scriptView" class="view container">
-        <div class="script-grid">
-            <div class="script-menu">
-                <div style="font-size: 0.65rem; font-weight: 800; color: var(--scb-blue); margin-bottom: 0.5rem; padding-left: 0.5rem;">QUICK NAVIGATION</div>
-                <div class="menu-link" onclick="document.getElementById('s-greet').scrollIntoView()">🟢 Greeting & Verification</div>
-                <div class="menu-link" onclick="document.getElementById('s-activation').scrollIntoView()">🔵 Card Activation</div>
-                <div class="menu-link" onclick="document.getElementById('s-online').scrollIntoView()">🟡 Online </div>  
-                <div class="menu-link" onclick="document.getElementById('s-Travel').scrollIntoView()">🟡 Travel </div>  
-                <div class="menu-link" onclick="document.getElementById('s-emergency').scrollIntoView()">🔴 Lost & Replacement</div>
-                <div class="menu-link" onclick="document.getElementById('s-rule').scrollIntoView()">🟠 removing Rules</div>
-                <div class="menu-link" onclick="document.getElementById('s-suffix').scrollIntoView()">🟣 Suffix </div>
-                <div class="menu-link" onclick="document.getElementById('s-Installments').scrollIntoView()">🟣 Installments </div>
-                <div class="menu-link" onclick="document.getElementById('s-digital').scrollIntoView()">⚪ E-Banking Reset</div>
+    <div class="script-grid">
+        <div class="script-menu">
+            <div style="font-size: 0.65rem; font-weight: 800; color: var(--scb-blue); margin-bottom: 0.5rem; padding-left: 0.5rem;">QUICK NAVIGATION</div>
+            
+            <div class="input-group" style="margin-bottom: 1rem; position: relative;">
+                <input type="text" id="scriptSearch" class="input-pro" placeholder="🔍 Search in script..." onkeyup="filterScript()" style="padding-left: 2rem; border-color: var(--scb-blue);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; left: 8px; top: 8px; width: 16px; height: 16px; color: var(--text-muted);"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
             </div>
 
-            <div class="script-content">
-                <div class="script-section" id="s-greet">
-                    <h3><svg class="svg-icon" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> Greeting & Identity Verification</h3>
-                    <div class="line agent"><b>Agent:</b> Good morning / Good afternoon. Suez Canal Bank, <span class="var-text">[Your Name]</span> with you.</div>
-                    <div class="line agent"><b>Agent:</b> Welcome Mr. <span class="var-text">[Client Name]</span>. How can I help you?</div>
-                    <div class="line agent"><b>Agent:</b> Okay, firstly I need to verify your data, then I will help you.</div>
-                    <div style="margin-top: 10px; font-weight: bold; font-size: 0.75rem; color: var(--text-muted);">VERIFICATION QUESTIONS:</div>
-                    <div class="line agent">1. Can you provide me with your account number or the last four digits of your debit card?</div>
-                    <div class="line agent">2. Can you provide your full name, passport number, and date of birth?</div>
-                    <div class="line agent">3. Financials: Branch name, account balance, credit card limit, last deposit/withdrawal, or loan installment?</div>
-                    <div class="line agent" style="background:#f0fdf4; border-color:#22c55e;"><b>If Correct:</b> Thank you for verifying the data correctly.</div>
-                    <div class="line agent" style="background:#fef2f2; border-color:#ef4444;"><b>If Incorrect:</b> I am sorry, this data is incorrect. It is difficult to complete the call. Please review your data from the branch or statement and call us back.</div>
-                </div>
+            <div class="menu-link" onclick="document.getElementById('s-act').scrollIntoView()">🟢 1. Card Activation</div>
+            <div class="menu-link" onclick="document.getElementById('s-pin').scrollIntoView()">🔴 2. PIN & Blocking</div>
+            <div class="menu-link" onclick="document.getElementById('s-limit').scrollIntoView()">🟡 3. Limits & Travel</div>
+            <div class="menu-link" onclick="document.getElementById('s-install').scrollIntoView()">🔵 4. Installments & Cash</div>
+            <div class="menu-link" onclick="document.getElementById('s-dispute').scrollIntoView()">🟣 5. Disputes & Claims</div>
+            <div class="menu-link" onclick="document.getElementById('s-digital-rt').scrollIntoView()">⚪ 6. Spotlight Retail</div>
+            <div class="menu-link" onclick="document.getElementById('s-digital-cr').scrollIntoView()">🏢 7. Spotlight Corp & Corpay</div>
+            <div class="menu-link" onclick="document.getElementById('s-close').scrollIntoView()">🔚 8. Errors & Closing</div>
+        </div>
 
-                <div class="script-section" id="s-activation">
-                    <h3>🔵 Card Activation (Debit / Credit)</h3>
-                    <div class="line agent"><b>Step 1:</b> Can you confirm the last four digits of the card and the expiry date?</div>
-                    <div class="line agent"><b>Step 2:</b> Now the card is activated. You must go to an SCB ATM to create a 4-digit PIN. Choose "Create New PIN" and enter the same 4 digits twice.</div>
-                    <div style="font-size: 0.75rem; color: var(--scb-blue); font-weight: bold;">Usage Limits:</div>
-                    <div class="line agent">
-                        • Daily local cash withdrawal: 30,000 EGP.<br>
-                        • SCB ATM withdrawal is FREE, other ATMs: 5 EGP commission.<br>
-                        • (Credit Card) 5% withdrawal commission (Min 50 EGP). Interest rate: 3.75% monthly.
-                    </div>
-                </div>
+        <div class="script-content" id="scriptContentArea">
+            
+            <div class="script-section" id="s-act">
+                <h3>🟢 1. CARD ACTIVATION & MAINTENANCE</h3>
+                
+                <h4 style="color: var(--scb-blue); font-size: 0.85rem; margin: 10px 0;">1.1 Debit Card Activation</h4>
+                <div class="line agent"><b>Verification:</b> "Could you please clarify the last four digits of the card which you want to activate? And the expiration date?"</div>
+                <div class="line agent"><b>Action:</b> "I'll activate your card right now. During activation, I'll explain to you the fees and limits of usage of your card."</div>
+                <div class="line agent" style="background:#f8fafc; border-left-color:var(--scb-blue);"><b>Fees & Limits:</b> "The issuance fees are [amount] and the renewal fees are [amount]. The daily limit of cash withdrawal is 30,000 EGP. The maximum withdrawal per transaction from SCB ATM is 6,000 EGP, and from other banks is 4,000 EGP. Withdrawals/inquiries are free from SCB ATMs. From other banks, commission is 5 EGP for inquiries and 5 EGP for withdrawals."</div>
 
-                <div class="script-section" id="s-online">
-                    <h3>🟡 Online Increase</h3>
-                    <div class="line customer"><b>Customer:</b> My transaction was declined on the internet.</div>
-                    <div class="line agent"><b>Agent:</b> By default, online purchase is inactive, but I can activate it for you now.</div>
-                    <div class="line agent"><b>Agent:</b> The request is submitted until further notice. Use on secure websites; it is your personal responsibility. Your card will be ready within 2 hours.</div>
-                    <div style="margin-top: 15px; font-weight: bold; color: var(--purple);">TRAVEL NOTE:</div>
-                    <div class="line agent"><b>Agent:</b> Travel dates? Destination? Your mobile number abroad?</div>
-                    <div class="line agent"><b>Agent:</b> 10% currency fees apply. Our international number is 00-202-19093. Please send passport entry/exit stamps within 90 days.</div>
-                </div>
+                <h4 style="color: var(--scb-blue); font-size: 0.85rem; margin: 10px 0;">1.2 Credit Card Activation</h4>
+                <div class="line agent"><b>Verification & Action:</b> "Could you please clarify the last four digits...? I'll activate your card right now. During activation, I'll explain the fees and limits."</div>
+                <div class="line agent" style="background:#f8fafc; border-left-color:var(--scb-blue);"><b>Grace Period:</b> "There will be an allowance period for purchase of 55 days calculated from the first day of any month. If you make a transaction in [Month], you will still be obligated to pay it before the 25th of [Next Month]."</div>
+                <div class="line agent" style="background:#fef2f2; border-left-color:var(--danger);"><b>Cash Withdrawal:</b> "In the case of cash withdrawal, there will be no allowance period left. You will be charged 3.75% interest in addition to the ATM commission, which is 5% (minimum 50 EGP)."</div>
 
-                <div class="script-section" id="s-emergency">
-                    <h3>🔴 Lost Card & Replacement</h3>
-                    <div class="line customer"><b>Customer:</b> I lost my card / My card was stolen.</div>
-                    <div class="line agent"><b>Agent:</b> I can deactivate your card temporarily. If you prefer, we can close it permanently and issue a new one within 3 working days.</div>
-                    <div class="line agent"><b>Note:</b> Replacement fees are <span class="var-text">[Amount]</span>. Do you prefer delivery to your address or a specific branch?</div>
-                </div>
-
-                <div class="script-section">
-                    <h3>🟢 Call Ending</h3>
-                    <div class="line agent"><b>Agent:</b> Do you have any other questions?</div>
-                    <div class="line agent"><b>Agent:</b> Okay, thank you for contacting Suez Canal Bank. Have a nice day. Goodbye.</div>
-                </div>
+                <h4 style="color: var(--scb-blue); font-size: 0.85rem; margin: 10px 0;">1.3 Account Linking (Suffix)</h4>
+                <div class="line agent"><b>Add Suffix:</b> "You have multiple accounts, but the account you want isn’t linked to the card. Do you want to link it? Which account primary? I sent the request (SLA 90 mins)."</div>
+                <div class="line agent"><b>Edit Suffix:</b> "The account you want to withdraw from is not linked. I will send a request (SLA 90 mins) to modify the linked account."</div>
+                <div class="line agent"><b>Change Primary / SMS:</b> "Your primary account is [A] not [B]. Do you want to change it? / Here is the number for SMS: [Number]. Request submitted."</div>
             </div>
+
+            <div class="script-section" id="s-pin">
+                <h3>🔴 2. PIN, SECURITY & BLOCKING</h3>
+                
+                <h4 style="color: var(--scb-blue); font-size: 0.85rem; margin: 10px 0;">2.1 Reset PIN & Trials</h4>
+                <div class="line agent"><b>Identification:</b> "The reason for the rejection is that you entered the PIN incorrectly. Do you remember it or forgot it?"</div>
+                <div class="line agent"><b>If Forgot (Reset PIN):</b> "I sent a request to remove your current password (SLA). Go to SCB ATM, insert card, it will ask for a password. Enter any 4 numbers. Choose (Create a password), enter the same 4 numbers again, then confirm for a third time."</div>
+                <div class="line agent"><b>If Remembered (Reset Trials):</b> "I'll remove the incorrect attempts so you can complete your transactions. Note: This procedure is only available once a day and twice a month."</div>
+
+                <h4 style="color: var(--scb-blue); font-size: 0.85rem; margin: 10px 0;">2.2 Blocking & Lost Cards</h4>
+                <div class="line agent"><b>Temporary Block:</b> "Any other number to contact if cut off? I will suspend it temporarily. If found, contact us to activate. If not, it is better to close it and replace it (SLA)."</div>
+                <div class="line agent" style="background:#fffbeb; border-left-color:var(--warning);"><b>ATM Capture:</b> If SCB ATM at a branch: "We will temporarily suspend it, you can receive it from the branch next business day." If other bank ATM: "Card is automatically destroyed, we must permanently suspend and replace."</div>
+
+                <h4 style="color: var(--scb-blue); font-size: 0.85rem; margin: 10px 0;">2.3 Card Replacement</h4>
+                <div class="line agent"><b>Process:</b> "Do you want to receive it from branch [Name] or address [Address]? The card type is [Type], cost is [Cost]. It will be deducted automatically."</div>
+                <div class="line agent" style="background:#fef2f2; border-left-color:var(--danger);"><b>If Insufficient Funds:</b> "Unfortunately, it is not possible because there is not enough balance. You must deposit [Amount] / pay minimum payment and contact us again."</div>
+            </div>
+
+            <div class="script-section" id="s-limit">
+                <h3>🟡 3. LIMITS, TRAVEL & EXCEPTIONS</h3>
+                
+                <h4 style="color: var(--scb-blue); font-size: 0.85rem; margin: 10px 0;">3.1 Online Limit Increase</h4>
+                <div class="line agent"><b>Action:</b> "Your card isn’t activated online or exceeded limit. I can activate it. Would you like the whole limit or part? Standard duration is 90 mins. Activation is in Egypt only, local currency, at your own responsibility."</div>
+
+                <h4 style="color: var(--scb-blue); font-size: 0.85rem; margin: 10px 0;">3.2 Travel Note</h4>
+                <div class="line agent"><b>Probing:</b> "Departure/Return dates? Country? Mobile number abroad?"</div>
+                <div class="line agent"><b>Action:</b> "I sent a request (SLA 2 hours). It's at your personal responsibility. Intl contact is 0020219093. Please send passport stamps within 90 days to card-travel@scbank.com.eg."</div>
+                <div class="line agent"><b>Limits:</b> "For purchases only. Markup fees will be 5%. Wish you a happy travel."</div>
+
+                <h4 style="color: var(--scb-blue); font-size: 0.85rem; margin: 10px 0;">3.3 Security Exceptions (Remove Rule & CC-Referral)</h4>
+                <div class="line agent"><b>Remove Rule:</b> "A protection measure was applied due to close online transactions. I will review transactions with you first... I sent the request (SLA 2 hours). It's at your own responsibility."</div>
+                <div class="line agent"><b>Suspicious Trx:</b> "Card suspended due to suspicious transaction. Are you the one who made these: [Amount] from [Merchant]? If yes, I will reactivate. If no, we will suspend permanently and replace."</div>
+            </div>
+
+            <div class="script-section" id="s-install">
+                <h3>🔵 4. INSTALLMENTS & FINANCIAL SERVICES</h3>
+                
+                <h4 style="color: var(--scb-blue); font-size: 0.85rem; margin: 10px 0;">4.1 Zero Interest Installment</h4>
+                <div class="line agent"><b>Terms:</b> "Available for transactions >= 500 EGP, within 20 days of deduction. Up to 90% of credit limit. Zero interest, only one-time commission based on tenor (e.g., 3 months = 5%, 6 months = 8%). Early cancellation fee is 5%."</div>
+
+                <h4 style="color: var(--scb-blue); font-size: 0.85rem; margin: 10px 0;">4.2 Easy Payment Plan & Balance Transfer</h4>
+                <div class="line agent"><b>Easy Payment:</b> "Duration 24 to 60 months. 2% interest per installment, no admin fees. Min 500 EGP."</div>
+                <div class="line agent"><b>Balance Transfer:</b> "Transfer unused limit to pay another bank's card. Min 2000 EGP. 2% processing fee (one-time) + 2% interest per month."</div>
+
+                <h4 style="color: var(--scb-blue); font-size: 0.85rem; margin: 10px 0;">4.3 Cash On Phone</h4>
+                <div class="line agent"><b>Terms:</b> "Withdraw from credit card to current account. Min 1000 EGP. 3% admin fee (one-time) + 2% interest per month."</div>
+
+                <h4 style="color: var(--scb-blue); font-size: 0.85rem; margin: 10px 0;">4.4 Reasons for Rejecting Installments</h4>
+                <div class="line agent" style="background:#fef2f2; border-left-color:var(--danger);">"Amount is less than minimum / Transaction exceeds available limit (90% cap) / You have late payments / Data update required in branch / Transaction older than 20 days / No current account available."</div>
+            </div>
+
+            <div class="script-section" id="s-dispute">
+                <h3>🟣 5. DISPUTES & CLAIMS</h3>
+                
+                <h4 style="color: var(--scb-blue); font-size: 0.85rem; margin: 10px 0;">5.1 ATM Withdrawal Dispute</h4>
+                <div class="line agent"><b>Not Refunded:</b> "Wait 24 hours. If not returned, visit branch to submit written objection. SCB ATM takes max 3 working days, 123 Network takes 12 working days. If rejected, 50 EGP fee is deducted."</div>
+
+                <h4 style="color: var(--scb-blue); font-size: 0.85rem; margin: 10px 0;">5.2 Purchases Dispute (Debit & Credit)</h4>
+                <div class="line agent"><b>If receipt shows rejection:</b> "Go to branch, submit written request. Refund takes 50-60 normal days."</div>
+                <div class="line agent"><b>If no receipt:</b> "(Debit) Wait 30 working days. (Credit) Wait 14 normal days. If not returned, go to branch."</div>
+
+                <h4 style="color: var(--scb-blue); font-size: 0.85rem; margin: 10px 0;">5.3 Currency Exchange Dispute (Special)</h4>
+                <div class="line agent"><b>Scenario:</b> Customer travelling, ATM withdrew money. "I will send inquiry request (SLA 2 working days). Need your Full Name, ID, Passport, IBAN, Swift, Bank Name. Send receipt to call.center@scbank.com.eg."</div>
+            </div>
+
+            <div class="script-section" id="s-digital-rt">
+                <h3>⚪ 6. DIGITAL BANKING (SPOTLIGHT RETAIL)</h3>
+                
+                <h4 style="color: var(--scb-blue); font-size: 0.85rem; margin: 10px 0;">6.1 Registration & Activation</h4>
+                <div class="line agent"><b>Steps:</b> "Visit official page -> Retail online banking -> Enrol now -> Personal Banking -> Fill Data -> I will send Activation code -> Enter App -> Activate profile."</div>
+                <div class="line agent"><b>Token:</b> "Download SCB Token -> SCB Mobile (Settings) -> Token activation -> Generate Token -> Create token -> Copy Serial/Code to SCB Token."</div>
+
+                <h4 style="color: var(--scb-blue); font-size: 0.85rem; margin: 10px 0;">6.2 Reset Password & Unlock</h4>
+                <div class="line agent"><b>Action:</b> "I'll send a link to your email. Enter username, create new password (must include symbols, numbers, upper/lowercase, 8-20 characters)."</div>
+            </div>
+
+            <div class="script-section" id="s-digital-cr">
+                <h3>🏢 7. DIGITAL BANKING (CORPORATE & CORPAY)</h3>
+                
+                <h4 style="color: var(--scb-blue); font-size: 0.85rem; margin: 10px 0;">7.1 Spotlight Corporate</h4>
+                <div class="line agent"><b>Verification:</b> Must call from registered number, need Account No, National ID, Company Name, Email.</div>
+                <div class="line agent"><b>Action:</b> "I will send Username and Activation code. Within 60 mins, request will execute. Go to Corporate online banking -> Activate profile."</div>
+
+                <h4 style="color: var(--scb-blue); font-size: 0.85rem; margin: 10px 0;">7.2 Corpay System</h4>
+                <div class="line agent"><b>Verification:</b> Need Account No, Company/Full Name, System Username, National ID, Hard token serial.</div>
+                <div class="line agent"><b>Hard Token:</b> "Open hard token, enter 123789, enter new 6-digit password, confirm."</div>
+                <div class="line agent"><b>Remove PUK:</b> "I will remove it. Type 123789, create new 6-digit password."</div>
+            </div>
+
+            <div class="script-section" id="s-close" style="border-bottom: none;">
+                <h3>🔚 8. TROUBLESHOOTING & CLOSING</h3>
+                
+                <h4 style="color: var(--scb-blue); font-size: 0.85rem; margin: 10px 0;">8.1 System Errors</h4>
+                <div class="line agent" style="background:#fef2f2; border-left-color:var(--danger);"><b>Wrong Data:</b> "I will send inquiry to amend it (SLA 2 business days) or visit branch."</div>
+                <div class="line agent" style="background:#fef2f2; border-left-color:var(--danger);"><b>System Error:</b> "I'll send inquiry to relevant dept. Please send screenshot to call.center@scbank.com.eg."</div>
+                <div class="line agent" style="background:#fef2f2; border-left-color:var(--danger);"><b>Corporate not from Reg Number:</b> "Unfortunately, you must contact us from the registered number."</div>
+
+                <h4 style="color: var(--scb-blue); font-size: 0.85rem; margin: 10px 0;">8.2 Closing Statement</h4>
+                <div class="line agent" style="background:#f0fdf4; border-left-color:var(--success);">"Thank you for contacting Suez Canal Bank. Have a nice day. Goodbye."</div>
+            </div>
+
         </div>
     </div>
+</div>
 
                 <div id="qualityView" class="view container">
         <div class="script-grid">
@@ -1910,6 +1988,28 @@
                     winCalcAction('c');
                 }
             });
+            /* =====================================================
+            12. محرك بحث السكريبت (Script Search Engine)
+            ===================================================== */
+            function filterScript() {
+                // 1. جلب الكلمة المكتوبة في مربع البحث وتحويلها لحروف صغيرة
+                let input = document.getElementById('scriptSearch').value.toLowerCase();
+                
+                // 2. جلب جميع السكاشن (الأقسام) داخل السكريبت
+                let sections = document.querySelectorAll('#scriptContentArea .script-section');
+                
+                sections.forEach(section => {
+                    // جلب النص بالكامل الموجود داخل السيكشن
+                    let text = section.innerText.toLowerCase();
+                    
+                    // إذا كان النص يحتوي على كلمة البحث، اعرض السيكشن، وإلا قم بإخفائه
+                    if(text.includes(input)) {
+                        section.style.display = 'block';
+                    } else {
+                        section.style.display = 'none';
+                    }
+                });
+            }
             </script>
         </body>
     </html>
